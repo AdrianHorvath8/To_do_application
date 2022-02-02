@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        .home-container{
+            
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+        }
+    </style>
+</head>
+<body>
+    {% extends "main.html" %}
+    {% block content %}
+    <div class="home-container">
+        
+        <div>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Write your task here...">
+            </form>
+            {% for task in tasks %} 
+            <div>
+                {{task.id}}--{{task}} 
+                <form action="" method="post">
+                    <input type="checkbox" name="done" >
+                    
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <h4>Done tasks</h4>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
