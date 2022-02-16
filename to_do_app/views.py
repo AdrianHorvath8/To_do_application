@@ -1,16 +1,19 @@
+
 from .models import Task
 from django.shortcuts import redirect, render
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .forms import TaskForm
 
 @login_required(login_url="login")
 def home(request):
     tasks=Task.objects.all()
     if request.method == "POST":
         task=Task.objects.create(
-            body=request.POST.get("body")
+            body=request.POST.get("body"),
+            user=request.user
         )
         task.save()
         return redirect("home")
@@ -55,3 +58,43 @@ def login_page(request):
 def logout_user(request):
     logout(request)
     return redirect("home")
+
+@login_required(login_url="login")
+def update_task(request,pk):
+    task=Task.objects.get(id=pk)
+    forms=TaskForm(instance=task)
+
+    if request.method=="POST":
+        forms=TaskForm(request.POST,instance=task)
+        if forms.is_valid():
+            forms.save()
+            return redirect("home")
+    context={"forms":forms}
+    return render(request,"to_do_app/update_tasks.html",context)
+
+@login_required(login_url="login")
+def delete_task(request,pk):
+    task=Task.objects.get(id=pk)
+
+    if request.method=="POST":
+        task.delete()
+        return redirect("home")
+    context={"obj":task}
+    return render(request,"to_do_app/delete_page.html",context)
+
+@login_required(login_url="login")
+def statement(request,pk):
+    task=Task.objects.filter(id=pk).values("statement")
+
+    for i in task:
+        print(i)
+        if i=={"statement":True}:
+            i=Task.objects.filter(id=pk).values("statement").update(statement=False)
+        else:
+            i=Task.objects.filter(id=pk).values("statement").update(statement=True)
+    
+    
+    return redirect("home")
+
+
+#spraviť prečiarknutie tasku

@@ -5,11 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    
     <style>
         .home-container{
             
             display: grid;
             grid-template-columns: 3fr 1fr;
+        }
+        .prettier{
+            text-align: center;
+            padding: 200px auto;
+            margin: auto 200px;
+            max-width: 420px;
         }
     </style>
 </head>
@@ -18,25 +25,54 @@
     {% block content %}
     <div class="home-container">
         
-        <div>
-            
+        <div class="prettier">
+            <h2>Hello {{user}}</h2>
             <form action="" method="post">
                 {% csrf_token %}
                 <input type="text" name="body" placeholder="Write your task here...">
             </form>
+            <small>Your tasks:</small>
             {% for task in tasks %} 
+            {% if request.user == task.user %}
             <div>
-                {{task.id}}--{{task}} 
-                <form action="" method="post">
-                    <input type="checkbox" name="done" >
-                    
-                </form>
+                {% if task.statement == False %}
+                <div>
+                    <div class="task-holder">
+                        <strong>
+                            <a href="{% url 'statement' task.id%}">{{task}}</a>
+                        </strong>
+                    </div>
+                    <div>
+                        <a href="{% url 'update_task' task.id%}">Update</a>
+                        <a href="{% url 'delete_task' task.id%}">Delete</a>
+                    </div>
+                    <p></p>
+                </div>
+                {% endif %}
+                
             </div>
+            {% endif %}
             {% endfor %}
         </div>
 
         <div>
             <h4>Done tasks</h4>
+            {% for task in tasks %}
+            {% if task.user == request.user %}
+            <div>
+                {% if task.statement == True %}
+                <div>
+                    <a href="{% url 'statement' task.id%}">{{task}}</a>
+                    <div>
+                        <a href="{% url 'update_task' task.id%}">Update</a>
+                        <a href="{% url 'delete_task' task.id%}">Delete</a>
+                    </div>
+                    <p></p>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
     {% endblock %}
