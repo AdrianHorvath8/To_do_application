@@ -48,7 +48,7 @@
                 <input type="text" name="body" placeholder="Write your task here...">
             </form>
             <small>Your tasks:</small>
-            {% for task in tasks %} 
+            {% for task in task_search %} 
             {% if request.user == task.user %}
             <div>
                 {% if task.statement == False %}
@@ -73,7 +73,7 @@
 
         <div>
             <h4>Done tasks</h4>
-            {% for task in tasks %}
+            {% for task in task_search %}
             {% if task.user == request.user %}
             <div>
                 {% if task.statement == True %}

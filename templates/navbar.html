@@ -17,6 +17,14 @@
     <a href="{% url 'login' %}">Login</a>
     {% endif %}
 
+    <form action="" method="get">
+        {% csrf_token %}
+        <small>Search for tasks:</small>
+        <div>
+            <input type="text" placeholder="Search..." name="q">
+        </div>
+    </form>
+
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}

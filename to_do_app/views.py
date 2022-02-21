@@ -6,9 +6,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import TaskForm
+from django.db.models import Q
 
 @login_required(login_url="login")
 def home(request):
+    q= request.GET.get("q")
+    if q == None:
+        q=""
+    
+    task_search=Task.objects.filter(
+        Q(body__icontains=q)
+    )
     tasks=Task.objects.all()
     if request.method == "POST":
         task=Task.objects.create(
@@ -18,7 +26,7 @@ def home(request):
         task.save()
         return redirect("home")
 
-    context={"tasks":tasks}
+    context={"task_search":task_search}
     return render(request,"to_do_app/home.html",context)
 
 def register_page(request):
