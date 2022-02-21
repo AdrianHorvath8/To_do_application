@@ -7,6 +7,7 @@
     <title>Home</title>
     
     <style>
+        
         .home-container{
             
             display: grid;
@@ -17,7 +18,22 @@
             padding: 200px auto;
             margin: auto 200px;
             max-width: 420px;
+            
         }
+        
+        .task-holder a:hover{
+            text-decoration: line-through;
+            
+        }
+        .done-task-container {
+            text-decoration: line-through;
+        }
+        
+        .done-task-container a:hover{
+            display: inline-block
+        }
+        
+        
     </style>
 </head>
 <body>
@@ -62,7 +78,9 @@
             <div>
                 {% if task.statement == True %}
                 <div>
-                    <a href="{% url 'statement' task.id%}">{{task}}</a>
+                    <div class="done-task-container">
+                        <a href="{% url 'statement' task.id%}">{{task}}</a>
+                    </div>
                     <div>
                         <a href="{% url 'update_task' task.id%}">Update</a>
                         <a href="{% url 'delete_task' task.id%}">Delete</a>

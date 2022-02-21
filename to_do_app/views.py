@@ -87,7 +87,6 @@ def statement(request,pk):
     task=Task.objects.filter(id=pk).values("statement")
 
     for i in task:
-        print(i)
         if i=={"statement":True}:
             i=Task.objects.filter(id=pk).values("statement").update(statement=False)
         else:
